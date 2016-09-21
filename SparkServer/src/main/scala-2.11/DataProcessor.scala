@@ -19,23 +19,21 @@ object DataProcessor {
 
     // All Dealer data
     val DealerAvgTime = spark.sql("SELECT _c0 as Dealer, AVG(_c2) as Average FROM DealerUserRespTime GROUP BY _c0")
-    DealerAvgTime.write.mode("Append").format("com.databricks.spark.csv").save(s"s3://sce.umkc.ml/metrics/Output/DealerAverages.csv")
-
+    DealerAvgTime.write.mode("Append").json("s3://sce.umkc.ml/metrics/Output/DealerAverages.json")
     DealerAvgTime.createOrReplaceTempView("AverageDealerResponseTime")
+
     val std = spark.sql("SELECT STD(Average) StandardDeviation, AVG(Average) Average, MIN(Dealer) as min_value, MAX(Dealer) as max_value FROM AverageDealerResponseTime")
-    std.write.mode("Overwrite").format("com.databricks.spark.csv").save("s3://sce.umkc.ml/metrics/Output/AllDealerDataStd.csv")
+    std.write.mode("Overwrite").json("s3://sce.umkc.ml/metrics/Output/AllDealerDataStd.json")
 
     // User Averages
     val UserAvgTime = spark.sql("SELECT First(_c1) as User, AVG(_c2) as UserAverage, First(_c0) as Dealer FROM DealerUserRespTime GROUP BY _c1")
-    UserAvgTime.write.mode("Overwrite").format("com.databricks.spark.csv").save(s"s3://sce.umkc.ml/metrics/Output/UserAverages.csv")
+    UserAvgTime.write.mode("Overwrite").json("s3://sce.umkc.ml/metrics/Output/UserAverages.json")
+    UserAvgTime.createOrReplaceTempView("DealerUserUserAvg")
 
-    val dealers = df.select("_c0").distinct.collect.flatMap(_.toSeq)
-    val UserAverageDFList = dealers.map(dealer => UserAvgTime.filter(s"Dealer = $dealer"))
+    val DealerSTD = spark.sql("SELECT STD(UserAverage) StandardDeviation, AVG(UserAverage) Average, Dealer FROM DealerUserUserAvg GROUP BY Dealer")
+    DealerSTD.write.mode("Overwrite").json("s3://sce.umkc.ml/metrics/Output/DealerSpecificData.json")
 
-    val resultSet = UserAverageDFList.map(f => {
-      f.createOrReplaceTempView("temp")
-      val result = spark.sql("SELECT STD(UserAverage) StandardDeviation, AVG(UserAverage) Average, MIN(User) as min_value, MAX(User) as max_value, First(Dealer) as Dealer FROM temp")
-      result.write.mode("Overwrite").format("com.databricks.spark.csv").save(s"s3://sce.umkc.ml/metrics/Output/${result.select("Dealer").first().getAs(0)}.csv")
-    })
+    System.exit(0)
+
   }
 }
