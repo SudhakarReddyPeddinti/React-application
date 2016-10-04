@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E69B09DA-4134-45B6-BE48-1A53FDADB7C0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OperatorPanel</RootNamespace>
+    <AssemblyName>OperatorPanel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include=".babelrc" />
+    <None Include=".editorconfig" />
+    <None Include=".eslintrc" />
+    <None Include="App.config" />
+    <None Include="package.json" />
+    <None Include="README.md" />
+    <None Include="src\styles\styles.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="src\actions\operatorPanelActions.js" />
+    <Content Include="src\api\api.js" />
+    <Content Include="src\components\OperatorPanelApp.js" />
+    <Content Include="src\components\Tabs\BarChart.js" />
+    <Content Include="src\components\Tabs\LineChart.js" />
+    <Content Include="src\components\Tabs\Operator.js" />
+    <Content Include="src\components\Tabs\Operators.js" />
+    <Content Include="src\components\Tabs\Panel.js" />
+    <Content Include="src\components\Tabs\PieChart.js" />
+    <Content Include="src\components\Tabs\SearchCustomer.js" />
+    <Content Include="src\components\Tabs\Showroom.js" />
+    <Content Include="src\components\Tabs\Summary.js" />
+    <Content Include="src\constants\ActionTypes.js" />
+    <Content Include="src\constants\EnvironmentTypes.js" />
+    <Content Include="src\containers\App.js" />
+    <Content Include="src\favicon.ico" />
+    <Content Include="src\images\Email.gif" />
+    <Content Include="src\images\FileEmail.ico" />
+    <Content Include="src\images\user.png" />
+    <Content Include="src\images\Wait.png" />
+    <Content Include="src\images\WaitDark.png" />
+    <Content Include="src\index.html" />
+    <Content Include="src\index.js" />
+    <Content Include="src\lib\getEntityAtCursor.js" />
+    <Content Include="src\reducers\operatorPanel.js" />
+    <Content Include="src\reducers\operatorPanel.spec.js" />
+    <Content Include="src\reducers\index.js" />
+    <Content Include="src\reducers\Toolbar.js" />
+    <Content Include="src\store\configureStore.dev.js" />
+    <Content Include="src\store\configureStore.js" />
+    <Content Include="src\store\configureStore.prod.js" />
+    <Content Include="src\styles\bootstrap.css" />
+    <Content Include="src\styles\data-grid.css" />
+    <Content Include="src\styles\Draft.css" />
+    <Content Include="webpack.config.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
