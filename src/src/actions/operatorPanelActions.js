@@ -1,22 +1,20 @@
 import * as types from '../constants/ActionTypes';
 import api from '../api/api';
 
-
-
 export function handleFilterUserInput(filteredAgent) {
     return {
         type: types.FILTER_AGENT, filteredAgent
     };
 }
 
-export function chartDataID(id) {
-    return {
-        type: types.CHART_DATA_ID,
-        id
-    };
-}
+// export function chartDataID(id) {
+//     return {
+//         type: types.CHART_DATA_ID,
+//         id
+//     };
+// }
 
-export function selectedDealer(dealer) {
+export function selectedAgent(dealer) {
     return {
         type: types.DEALER,
         dealer
@@ -29,42 +27,33 @@ export function receiveDealerData(dealerData) {
 
 export function fetchDealerData() {
     return function (dispatch) {
-        // let data = {
-        //     "folder": "DealerAverages",
-        //     "bucket": "vindatabucket",
-        //     "type": "Dealer",
-        //     "id": "5836"
-        // };
         return api.getMSDealerData().then(
             function (response) {
                 const dealerData = response.data;
-                //console.log("AWS Dealer data",dealerData);
                 dispatch(receiveDealerData(dealerData));
             });
     };
 }
 
-export function receiveCustomerData(customerData) {
-    return {
-        type: types.CUSTOMER_DATA, customerData
-    }
-}
+// export function receiveCustomerData(customerData) {
+//     return {
+//         type: types.CUSTOMER_DATA, customerData
+//     }
+// }
 
-export function fetchCustomerData() {
-    return function (dispatch) {
-        return api.getMSCustomerData().then(
-            function (response) {
-                const customerData = response.data;
-                //console.log("AWS customer", customerData);
-                dispatch(receiveCustomerData(customerData));
-            }
-        );
-    };
-}
+// export function fetchCustomerData() {
+//     return function (dispatch) {
+//         return api.getMSCustomerData().then(
+//             function (response) {
+//                 const customerData = response.data;
+//                 //console.log("AWS customer", customerData);
+//                 dispatch(receiveCustomerData(customerData));
+//             }
+//         );
+//     };
+// }
 
 export function receiveLeadData(leadData) {
-    //console.log("Received Lead Data:");
-    //console.log(leadData);
     return {
         type: types.LEAD_DATA, leadData
     }
@@ -89,7 +78,6 @@ export function fetchGlobalChartData() {
         return api.getAWSGlboalChartData(RequestPayload).then(
             (response) => {
                 const globalChartData = response.data;
-                console.log("AWS", globalChartData);
                 dispatch(receiveGlobalChartData(globalChartData));
             }
         );
@@ -100,4 +88,27 @@ export function receiveGlobalChartData(globalChartData) {
     return {
         type: types.GLOBAL_CHART_DATA, globalChartData
     }
+}
+
+export function receiveDealerAvg(dealerAvgData) {
+    return {
+        type: types.DEALER_AVG,
+        dealerAvgData
+    }
+}
+
+export function fetchDealerAvgData(dealerID) {
+    return function (dispatch) {
+        let RequestPayload = {
+            "folder": "DealerAverages",
+            "dealerID": dealerID.toString()
+        }
+        console.log("Action :: payload", RequestPayload);
+        return api.getAWSDealerAvgData(RequestPayload).then(
+            (response) => {
+                const dealerAvgData = response.data;
+                dispatch(receiveDealerAvg(dealerAvgData));
+            }
+        );
+    };
 }

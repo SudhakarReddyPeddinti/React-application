@@ -38,12 +38,11 @@ const post = function (url, data) {
 //The API calls your app uses go down here so they're exported for use elsewhere...
 module.exports = {
   //This is just an example API call
-  getCustomers() {
-    //return post('API/CRMServiceBase/v1/users/search/');
-  },
+  // getCustomers() {
+  //   return post('API/CRMServiceBase/v1/users/search/');
+  // },
 
   getMSDealerData() {
-    //return get('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/development/vindatabucket', data);
     return get('http://localhost:8080/JAX-RS/rest/Dealer/data/get');
   },
 
@@ -51,11 +50,15 @@ module.exports = {
     return get('http://localhost:8080/JAX-RS/rest/Lead/data/get');
   },
 
-  getMSCustomerData() {
-    return get('http://localhost:8080/JAX-RS/rest/Customer/data/get');
-  },
+  // getMSCustomerData() {
+  //   return get('http://localhost:8080/JAX-RS/rest/Customer/data/get');
+  // },
 
   getAWSGlboalChartData(payload) {
+    return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);
+  },
+
+  getAWSDealerAvgData(payload) {
     return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);
   }
 };

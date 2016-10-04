@@ -5,13 +5,13 @@ export const CHANGE_ENVIRONMENT = 'CHANGE_ENVIRONMENT';
 export const GLOBAL_CHART_DATA = 'GLOBAL_CHART_DATA';
 
 // Customer action types
-export const CUSTOMER_DATA = 'CUSTOMER_DATA';
+// export const CUSTOMER_DATA = 'CUSTOMER_DATA';
 
 // Server Data action constant
 export const DEALER_DATA = 'DEALER_DATA';
 
 // Chart Data ID
-export const CHART_DATA_ID = 'CHART_DATA_ID';
+// export const CHART_DATA_ID = 'CHART_DATA_ID';
 
 // Filter user data
 export const FILTER_AGENT = 'FILTER_AGENT';
@@ -23,4 +23,10 @@ export const LEAD_DATA = 'LEAD_DATA';
 export const DEALER = 'DEALER';
 
 // DealerResponseTime data
-export const DEALER_RESP_DATA = 'DEALER_RESP_DATA';
+// export const DEALER_RESP_DATA = 'DEALER_RESP_DATA';
+
+// DealerSpecificData
+export const DEALER_SPC_DATA = 'DEALER_SPC_DATA';
+
+// DealerAverageData
+export const DEALER_AVG = 'DEALER_AVG';

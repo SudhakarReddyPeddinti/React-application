@@ -14,10 +14,10 @@ class CustomerPage extends React.Component {
         return (
             <div className="row">
                 <div className="col-md-10 col-md-offset-1">
-                    <div className="row">
+                 { /*    <div className="row">
                         <div className="col-md-4 scroll" id="leftPanel"><OperatorList appData={this.props.Data.customerData} filteredData={this.props.Data.filteredAgent} selectedID={this.props.Data.chartDataID} activityActions={this.props.Actions}/></div>
                         <div className="col-md-8" id="rightPanel"><CustomerGraphArea appData={this.props.Data}/></div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );
