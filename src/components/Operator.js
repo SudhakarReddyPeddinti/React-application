@@ -8,15 +8,17 @@ constructor() {
     this.class = "row operator-div shadow";
 }
 
-handleClick(dealer) {
-   this.props.actions.selectedDealer(dealer);
+handleClick(agent) {
+    // Validate the selected Agent and the active Agent are not the same
+    // before intiating the action to update the state. 
+   this.props.actions.selectedAgent(agent);
 }
 
 render() {
      let spanStyle = {fontWeight: 'bold'};
      return (
         <div>
-            <div onClick={()=>{this.handleClick(this.props.dealer)}} className={this.props.className}>
+            <div onClick={()=>{this.handleClick(this.props.agent)}} className={this.props.className}>
                 <div className="col-md-6 text-left contentFit"><MdAccountCircle size={35}/>
                     <span style={spanStyle}> {this.props.operatorFirstName} {this.props.operatorLastName}</span></div>
                 <div className="col-md-6 overlay contentFit">Status: <span> {this.props.status}</span></div>

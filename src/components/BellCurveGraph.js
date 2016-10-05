@@ -37,7 +37,7 @@ class BellCurveGraph extends React.Component{
         let N = 100;
         let maxx = 414.99;
         let ideal = 45;
-        let dealerAvg = nextProps.selectedDealer.dealerAvg; 
+        let dealerAvg = nextProps.selectedAgent.dealerAvg; 
         let mean = 46.31;
         let stdv = 44.14;
 

@@ -11,9 +11,10 @@ class UserPanelApp extends Component {
     }
 
      componentDidMount() {
-         this.props.actions.fetchCustomerData();
+         //this.props.actions.fetchCustomerData();
          this.props.actions.fetchDealerData();
          this.props.actions.fetchLeadData();
+         this.props.actions.fetchGlobalChartData();
     }
 
     render() {
@@ -64,6 +65,11 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(actions, dispatch)
   };
 }
+
+UserPanelApp.propTypes = {
+    appState: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired
+};
 
 export default connect(
   mapStateToProps,
