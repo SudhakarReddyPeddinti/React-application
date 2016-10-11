@@ -7,6 +7,7 @@ import DemoGraph from './DemoGraph';
 import objectAssign from 'object-assign';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import BellCurveInfoPanel from './BellCurveInfoPanel'
 
 class DealerPage extends React.Component {
   constructor(props, context) {
@@ -22,7 +23,8 @@ class DealerPage extends React.Component {
     return (<div className="row">
       <div className="col-md-10 col-md-offset-1">
         <div className="row drop-shadow">
-          <DemoGraph globalChartData={this.props.appData.globalChartData}/>
+          <div className="col-md-12 drop-shadow chart"><DemoGraph globalChartData={this.props.appData.globalChartData} dealerAvg={this.props.appData.dealerAvgData} selectedAgent={this.props.appData.selectedAgent} actions={this.props.Actions}/></div>
+          <div className="col-md-12 drop-shadow"><BellCurveInfoPanel dealerAvg={this.props.appData.dealerAvgData}/></div>
         </div>
         {/*<div className="col-md-10 col-md-offset-1">*/}
           <div className="row">

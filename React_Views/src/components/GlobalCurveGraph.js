@@ -40,18 +40,14 @@ class GlobalCurveGraph extends React.Component {
             // let stdv = 32115.6110379342;
 
             let maxx = nextProps.globalChartData.MaxValue;
-            console.log("GlobalCurveGraph :: WillReceiveProps : maxx ", maxx);
             let N = (maxx / 45);
-            console.log("GlobalCurveGraph :: WillReceiveProps : N ", N);
             let ideal = 45; 
             let dealerAvg = nextProps.dealerAvg.Average;
             let mean = nextProps.globalChartData.Mean;
             let stdv = nextProps.globalChartData.StandardDeviation;
 
             let step = (maxx / N);
-            console.log("GlobalCurveGraph :: WillReceiveProps : step ", step);
             let nearest = Math.round(ideal / step) * step;
-            console.log("GlobalCurveGraph :: WillReceiveProps : nearest ", nearest);
             let nullArray = Array.apply(null, { length: N + 1 });
             let xAxis = nullArray.map((n, i, x) => {
                 return Number(i) * step;
@@ -73,7 +69,6 @@ class GlobalCurveGraph extends React.Component {
                 return [xAxis[i], pdf[i], idealPoint[i]];
             });
 
-            console.log("GlobalCurveGraph :: WillRecieveProps : rows ", rows);
             this.dataPresent = true;
             let options = {
                 colors: ['#4592EE', '#36E5B5', '#0028EE'],
@@ -107,7 +102,6 @@ class GlobalCurveGraph extends React.Component {
         if (!this.dataPresent) {
             return null;
         }
-        console.log("GlobalCurveGraph :: Render : state", this.state);
         return (
             <div>
                 <div className={"my-pretty-chart-container"}>
