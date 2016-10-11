@@ -70,7 +70,7 @@ class GlobalCurveGraph extends React.Component {
             });
             let rows = new Array();
             rows = nullArray.map((v, i, a) => {
-                return [xAxis[i], pdf[i]+0.00001, idealPoint[i]];
+                return [xAxis[i], pdf[i], idealPoint[i]];
             });
 
             console.log("GlobalCurveGraph :: WillRecieveProps : rows ", rows);

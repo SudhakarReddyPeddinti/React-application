@@ -10,7 +10,7 @@ class CustomerGraphArea extends React.Component{
 render() {
     return (
         <div className="row">
-            <div className="col-md-12 drop-shadow" id="BarChart"><BarChart /></div>
+           {/* <div className="col-md-12 drop-shadow" id="BarChart"><BarChart /></div>
             <div className="col-md-12 drop-shadow">
                 <div className="row">
                     <div className="col-md-6 customerInfo">
@@ -24,7 +24,7 @@ render() {
                     </div>
                     <div className="col-md-6" id="PieChart"><PieChart dataValues={this.props.appData}/></div>
                 </div>
-            </div>
+            </div> */}
         </div>
         );
     }

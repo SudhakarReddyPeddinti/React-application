@@ -26,23 +26,22 @@ class UserBellCurveGraph extends React.Component {
                 },
                 {
                     'type': 'number',
-                    'label': 'All Dealer data'
+                    'label': 'Dealership performance'
+                },
+                 {
+                    'type': 'number',
+                    'label': 'User Average'
                 }
-                //  {
-                //     'type': 'number',
-                //     'label': 'Ideal Value'
-                // }
             ];
-            console.log("LOC::: Render COmponent did mount", nextProps.dealerSpecificGraph);
 
             let N = 100;
             let maxx = nextProps.dealerSpecificGraph.MaxValue;
-            //let ideal = nextProps.dataValues.selectedAgent.min;
+            let dealerAvg = nextProps.dealerSpecificGraph.UserAverage;
             let mean = nextProps.dealerSpecificGraph.Mean;
             let stdv = nextProps.dealerSpecificGraph.StandardDeviation;
 
             let step = (maxx / N);
-            //let nearest = Math.round(ideal/step)*step;
+            let nearest = Math.round(dealerAvg/step)*step;
             let nullArray = Array.apply(null, { length: N + 1 });
             let xAxis = nullArray.map((n, i, x) => {
                 return Number(i) * step;
@@ -51,25 +50,32 @@ class UserBellCurveGraph extends React.Component {
             let pdf = xAxis.map((v) => {
                 return this.NormalDensityZx(v, mean, stdv);
             });
-            // let idealPoint = xAxis.map((v, i, a) => {
-            //     if(a[i] === nearest) {
-            //         return pdf[i];
-            //     } else {
-            //         return null;
-            //     }
-            // });
+            let dealerAvgPoint = xAxis.map((v, i, a) => {
+                if(a[i] === nearest) {
+                    return pdf[i];
+                } else {
+                    return null;
+                }
+            });
             let rows = new Array();
             rows = nullArray.map((v, i, a) => {
-                // return [xAxis[i], pdf[i], idealPoint[i]];
-                return [xAxis[i], pdf[i]];
+                return [xAxis[i], pdf[i], dealerAvgPoint[i]];
             });
 
             this.dataPresent = true;
             let options = {
-                colors: ['#4592EE', '#36E5B5'],
+                colors: ['#0840AF', '#36E5B5'],
                 series: {
                     0: { pointShape: null, poitSize: 0 },
-                    1: { pointShape: 'circle', pointSize: 5 }
+                    1: { pointShape: 'line', pointSize: 5 }
+                },
+                hAxis: {
+                    title: 'Response Time (in minutes)', 
+                    gridlines: {count: 5}
+                },
+                vAxis: {
+                    title: 'user performance probabilistic value',
+                    textPosition: 'none'
                 }
             };
 
@@ -86,67 +92,6 @@ class UserBellCurveGraph extends React.Component {
         return Math.exp(-((x - Mean) * (x - Mean)) / (2 * StdDev * StdDev)) / (Math.sqrt(2 * Math.PI) * StdDev);
     }
 
-    //     componentWillReceiveProps(nextProps) {
-    //         let columns = [
-    //             {
-    //                 'type': 'number',
-    //                 'label': 'X Value'
-    //             },
-    //             {
-    //                 'type': 'number',
-    //                 'label': 'All Dealer data'
-    //             },
-    //              {
-    //                 'type': 'number',
-    //                 'label': 'Ideal Value'
-    //             }
-    //         ];
-    //         console.log("LOC::: Render COmponent did mount", nextProps.dataValues.selectedAgent);
-
-    //         let N = 100;
-    //         let maxx = nextProps.dataValues.selectedAgent.max;
-    //         let ideal = nextProps.dataValues.selectedAgent.min;
-    //         let mean = nextProps.dataValues.selectedAgent.mean;
-    //         let stdv = nextProps.dataValues.selectedAgent.stdv;
-
-    //         let step = (maxx / N);
-    //         let nearest = Math.round(ideal/step)*step;
-    //         let nullArray = Array.apply(null, { length: N + 1 });
-    //         let xAxis = nullArray.map((n, i, x) => {
-    //             return Number(i) * step;
-    //         });
-
-    //         let pdf = xAxis.map((v) => {
-    //             return this.NormalDensityZx(v, mean, stdv);
-    //         });
-    //         let idealPoint = xAxis.map((v, i, a) => {
-    //             if(a[i] === nearest) {
-    //                 return pdf[i];
-    //             } else {
-    //                 return null;
-    //             }
-    //         });
-    //         let rows = new Array();
-    //         rows = nullArray.map((v, i, a) => {
-    //             return [xAxis[i], pdf[i], idealPoint[i]];
-    //         });
-
-    //         this.dataPresent = true;
-    //         let options = {
-    //             colors: ['#4592EE', '#36E5B5'],
-    //             series: {
-    //                 0: { pointShape: null, poitSize: 0 },
-    //                 1: { pointShape: 'circle', pointSize: 5 }
-    //             }
-    //         };
-
-    //         this.setState({
-    //             'options': options,
-    //             'rows': rows,
-    //             'columns': columns
-    //         });
-    // }
-
     render() {
         if (!this.dataPresent) {
                 return null;
@@ -155,7 +100,7 @@ class UserBellCurveGraph extends React.Component {
         return (
             <div>
                 <div className={"my-pretty-chart-container"}>
-                    <Chart chartType = "AreaChart" rows = {this.state.rows} columns = {this.state.columns} options = {this.state.options} graph_id = "UserBellCurveGraph"  width={"100%"} height={"300px"}  legend_toggle={true} />
+                    <Chart chartType = "LineChart" rows = {this.state.rows} columns = {this.state.columns} options = {this.state.options} graph_id = "UserBellCurveGraph"  width={"100%"} height={"300px"}  legend_toggle={true} />
                 </div> 
             </div>
         );

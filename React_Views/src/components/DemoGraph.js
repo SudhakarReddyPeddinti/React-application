@@ -14,7 +14,6 @@ let xAx = [45,90,135,180,225,270,315,360,405,450,495,540,585,630,675,720,765,810
 let ii = 0, jj = 45;
 let zeros = Array.apply(null, Array(41535/45)).map(Number.prototype.valueOf,0);
 
-
 let zs = zeros.map(function() {
 	let rv = 0;
 	if(xAx[ii] == jj) {
@@ -32,6 +31,9 @@ let xlabels = _.range(45,41535,45);
 let mainData = xlabels.map(function(v,i) {
 	return [v, zs[i], smoothZs[i]];
 });
+
+let nulls = Array.apply(null, Array(41535/45))
+//nulls[nextProps.globalChartData.]
 
 let columns = [
                 {
@@ -56,15 +58,18 @@ let options = {
               color: 'black',
               selected: { color: 'blue' }
          },
-        //   curveType: 'function',
+          curveType: 'function',
           hAxis: {
               title: 'Response Time (in minutes)', 
-              gridlines: {count: 8},
-              scaleType: 'log',
+            //   gridlines: {count: 8},
+            //   scaleType: 'log',
               minorGridlines: { count: 10 }
             },
           vAxis: {
-              title: 'Number of Dealers'
+              title: 'Number of Dealers',
+              gridlines: {count: 8},
+              gridlineColor: '#F2F2F2',
+              baselineColor: 'none'
             },
         series: {
             0: { color: 'grey' },
