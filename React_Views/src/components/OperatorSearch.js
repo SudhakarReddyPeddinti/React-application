@@ -8,8 +8,6 @@ class OperatorSearch extends React.Component{
 
   handleChange() {
      this.props.Actions.handleFilterUserInput(this.refs.filterTextInput.value);
-     console.log("Filtered Input");
-     console.log(this.props.Data);
   }
 
 render() {
@@ -51,8 +49,13 @@ render() {
                         </div> */}
                     </div> 
             </div>
-    );
+        );
+    }
 }
-}
+
+OperatorSearch.propTypes = {
+    Data: React.PropTypes.object.isRequired,
+    Actions: React.PropTypes.object.isRequired
+};
 
 export default OperatorSearch;

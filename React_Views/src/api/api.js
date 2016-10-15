@@ -42,17 +42,13 @@ module.exports = {
   //   return post('API/CRMServiceBase/v1/users/search/');
   // },
 
-  getMSDealerData() {
-    return get('http://localhost:8080/JAX-RS/rest/Dealer/data/get');
+  getMSDealerData(payload) {
+    return post('http://localhost:8080/JAX-RS/rest/Dealer/data/get', payload);
   },
 
   getMSLeadData() {
     return get('http://localhost:8080/JAX-RS/rest/Lead/data/get');
   },
-
-  // getMSCustomerData() {
-  //   return get('http://localhost:8080/JAX-RS/rest/Customer/data/get');
-  // },
 
   getAWSGlboalChartData(payload) {
     //return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);

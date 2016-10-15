@@ -1,6 +1,5 @@
 import React, {Component, props} from 'react';
 import OperatorList from './OperatorList';
-import CustomerGraphArea from './CustomerGraphArea';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/operatorPanelActions';

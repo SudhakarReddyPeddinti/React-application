@@ -60,6 +60,9 @@ render() {
     }
 }
 
-// Todo #2: PropValication
+// PieChart.propTypes = {
+//     data: React.Protypes.object.isRequired,
+//     key: React.Proptypes.object.isRequired
+// };
 
 export default PieChart;

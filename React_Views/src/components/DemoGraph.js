@@ -1,6 +1,5 @@
 import React, { Component, props } from 'react';
 import PieChart from './PieChart';
-import BarChart from './BarChart';
 import _ from 'underscore';
 import { Chart } from 'react-google-charts';
 
@@ -47,12 +46,8 @@ class DemoGraph extends React.Component {
 
         let nulls = Array.apply(null, Array(41535 / 45));
         let bucket = Math.ceil(dealerAvg.Average/45)-1;
-        console.log("DemoGraph :: WillMount : bucket", bucket);
-        console.log("DemoGraph :: WillMount : zs[bucket]", zs[bucket]);
         nulls[bucket] = zs[bucket];
 
-        console.log("DemoGraph :: WillMount : nulls", nulls)
-        console.log("DemoGraph :: WillMount : zs",zs );
         let mainData = xlabels.map(function(v, i) {
             return [v, zs[i], smoothZs[i], nulls[i]];
         });
@@ -76,7 +71,7 @@ class DemoGraph extends React.Component {
         ];
 
         let options = {
-            title: 'Industry Performance',
+            title: 'Dealership community metrics',
             crosshair: {
                 trigger: 'both',
                 orientation: 'vertical',
@@ -88,8 +83,8 @@ class DemoGraph extends React.Component {
             hAxis: {
                 title: 'Response Time (in minutes)',
                 gridlines: { count: 8 },
-                  scaleType: 'log',
-                minorGridlines: { count: 10 }
+                scaleType: 'log'
+                // minorGridlines: { count: 10 }
             },
             vAxis: {
                 title: 'Number of Dealers',

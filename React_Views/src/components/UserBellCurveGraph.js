@@ -23,11 +23,16 @@ class UserBellCurveGraph extends React.Component {
                 },
                 {
                     'type': 'number',
-                    'label': 'Dealership performance'
+                    'label': ''
                 },
                  {
                     'type': 'number',
                     'label': 'User Average'
+                },
+                 {
+                    'type': 'number',
+                    'label': 'User Average',
+                    'role': 'tooltip'
                 }
             ];
 
@@ -56,7 +61,7 @@ class UserBellCurveGraph extends React.Component {
             });
             let rows = new Array();
             rows = nullArray.map((v, i, a) => {
-                return [xAxis[i], pdf[i], dealerAvgPoint[i]];
+                return [xAxis[i], pdf[i], dealerAvgPoint[i], xAxis[i]];
             });
 
             this.dataPresent = true;
@@ -66,6 +71,12 @@ class UserBellCurveGraph extends React.Component {
                     0: { pointShape: null, poitSize: 0 },
                     1: { pointShape: 'line', pointSize: 5 }
                 },
+                crosshair: {
+                trigger: 'both',
+                orientation: 'vertical',
+                color: 'black',
+                selected: { color: 'blue' }
+            },
                 hAxis: {
                     title: 'Response Time (in minutes)', 
                     gridlines: {count: 5}

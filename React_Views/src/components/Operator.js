@@ -19,7 +19,7 @@ render() {
      let spanStyle = {fontWeight: 'bold'};
      return (
         <div>
-            <div onClick={()=>{this.handleClick(this.props.agent)}} className={this.props.className}>
+            <div onClick={()=>{this.handleClick(this.props.agent);}} className={this.props.className}>
                 <div className="col-md-6 text-left contentFit"><MdAccountCircle size={35}/>
                     <span style={spanStyle}> {this.props.operatorFirstName} {this.props.operatorLastName}</span></div>
                 <div className="col-md-6 overlay contentFit">Status: <span> {this.props.status}</span></div>
@@ -29,9 +29,14 @@ render() {
     }
 }
 
-// Operator.propTypes = {
-//     operatorName: React.propTypes.object.isRequired,
-//     status: React.propTypes.object.isRequired
-// }
+Operator.propTypes = {
+    operatorFirstName: React.PropTypes.object.isRequired,
+    operatorLastName: React.PropTypes.object.isRequired,
+    status: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired,
+    agent: React.PropTypes.object.isRequired,
+    key: React.PropTypes.object.isRequired,
+    className: React.PropTypes.object.isRequired
+};
 
 export default Operator;

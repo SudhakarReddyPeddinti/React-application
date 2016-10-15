@@ -7,31 +7,24 @@ import DemoGraph from './DemoGraph';
 import objectAssign from 'object-assign';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import BellCurveInfoPanel from './BellCurveInfoPanel'
+import BellCurveInfoPanel from './BellCurveInfoPanel';
 
 class DealerPage extends React.Component {
   constructor(props, context) {
     super(props, context);
   }
 
-  // componentDidMount() {
-  //   //this.props.Actions.fetchGlobalChartData();
-  // }
-
   render() {
-    console.log("DealerPage :: this.props.appData", this.props.appData);
     return (<div className="row">
       <div className="col-md-10 col-md-offset-1">
         <div className="row drop-shadow">
           <div className="col-md-12 drop-shadow chart"><DemoGraph globalChartData={this.props.appData.globalChartData} dealerAvg={this.props.appData.dealerAvgData} selectedAgent={this.props.appData.selectedAgent} actions={this.props.Actions}/></div>
           <div className="col-md-12 drop-shadow"><BellCurveInfoPanel dealerAvg={this.props.appData.dealerAvgData}/></div>
         </div>
-        {/*<div className="col-md-10 col-md-offset-1">*/}
-          <div className="row">
-            <div className="col-md-4" id="leftPanel"><OperatorList appData={this.props.appData.dealerData} filteredData={this.props.appData.filteredAgent} selectedAgent={this.props.appData.selectedAgent} activityActions={this.props.Actions}/></div>
-            <div className="col-md-8" id="rightPanel"><DealerGraphArea appData={this.props.appData} actions={this.props.Actions}/></div>
-          </div>
-        {/*</div>*/}
+        <div className="row">
+          <div className="col-md-4" id="leftPanel"><OperatorList appData={this.props.appData.dealerData} filteredData={this.props.appData.filteredAgent} selectedAgent={this.props.appData.selectedAgent} activityActions={this.props.Actions}/></div>
+          <div className="col-md-8" id="rightPanel"><DealerGraphArea appData={this.props.appData} actions={this.props.Actions}/></div>
+        </div>
       </div>
     </div>
     );

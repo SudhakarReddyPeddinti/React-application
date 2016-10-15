@@ -7,13 +7,6 @@ export function handleFilterUserInput(filteredAgent) {
     };
 }
 
-// export function chartDataID(id) {
-//     return {
-//         type: types.CHART_DATA_ID,
-//         id
-//     };
-// }
-
 export function selectedAgent(dealer) {
     return {
         type: types.DEALER,
@@ -35,28 +28,10 @@ export function fetchDealerData() {
     };
 }
 
-// export function receiveCustomerData(customerData) {
-//     return {
-//         type: types.CUSTOMER_DATA, customerData
-//     }
-// }
-
-// export function fetchCustomerData() {
-//     return function (dispatch) {
-//         return api.getMSCustomerData().then(
-//             function (response) {
-//                 const customerData = response.data;
-//                 //console.log("AWS customer", customerData);
-//                 dispatch(receiveCustomerData(customerData));
-//             }
-//         );
-//     };
-// }
-
 export function receiveLeadData(leadData) {
     return {
         type: types.LEAD_DATA, leadData
-    }
+    };
 }
 
 export function fetchLeadData() {
@@ -74,7 +49,7 @@ export function fetchGlobalChartData() {
     return function (dispatch) {
         let RequestPayload = {
             "folder": "AllDealerDataStd"
-        }
+        };
         return api.getAWSGlboalChartData(RequestPayload).then(
             (response) => {
                 const globalChartData = response.data;
@@ -87,14 +62,14 @@ export function fetchGlobalChartData() {
 export function receiveGlobalChartData(globalChartData) {
     return {
         type: types.GLOBAL_CHART_DATA, globalChartData
-    }
+    };
 }
 
 export function receiveDealerAvg(dealerAvgData) {
     return {
         type: types.DEALER_AVG,
         dealerAvgData
-    }
+    };
 }
 
 export function fetchDealerAvgData(dealerID) {
@@ -102,8 +77,7 @@ export function fetchDealerAvgData(dealerID) {
         let RequestPayload = {
             "folder": "DealerAverages",
             "dealerID": dealerID.toString()
-        }
-        console.log("Action :: payload", RequestPayload);
+        };
         return api.getAWSDealerAvgData(RequestPayload).then(
             (response) => {
                 const dealerAvgData = response.data;

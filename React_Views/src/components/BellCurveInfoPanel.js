@@ -31,6 +31,6 @@ render() {
 
 BellCurveInfoPanel.propTypes = {
     dealerAvg: React.PropTypes.object.isRequired
-}
+};
 
 export default BellCurveInfoPanel;

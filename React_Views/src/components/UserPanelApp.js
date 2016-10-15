@@ -18,12 +18,11 @@ class UserPanelApp extends Component {
     }
 
     render() {
-        console.log("UserPanelApp Render");
         //let panelStyle = {padding:'10px 5px', marginTop:"-1px"};
         let titleStyle = {fontWeight:'bold', fontFamily:'Roboto', fontSize:'18px'};
         let upstyle = {paddingLeft: 15};
         return (
-            <div>
+        <div>
             <nav>
                 <div className="row nav-wrapper grey darken-3" >
                     <div className="col-md-10 col-md-offset-1">
@@ -46,17 +45,8 @@ class UserPanelApp extends Component {
                         </div>
                     </div>
                 </div>
-               {/* <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="row">
-                                <div className="col-md-12"><SearchBar Data={this.props.appState} Actions={this.props.actions}/></div>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
-                </nav>
-            </div>
+            </nav>
+        </div>
         );
     }
 }
