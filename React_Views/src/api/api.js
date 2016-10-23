@@ -51,12 +51,12 @@ module.exports = {
   },
 
   getAWSGlboalChartData(payload) {
-    //return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);
-    return get('http://localhost:8080/JAX-RS/rest/GlobalChartData/data/get', payload);
+    return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);
+    // return get('http://localhost:8080/JAX-RS/rest/GlobalChartData/data/get', payload);
   },
 
   getAWSDealerAvgData(payload) {
-    //return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);
-    return post('http://localhost:8080/JAX-RS/rest/DealerAverages/data', payload);
+    return post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', payload);
+    // return post('http://localhost:8080/JAX-RS/rest/DealerAverages/data', payload);
   }
 };

@@ -17,10 +17,10 @@ export function fetchDealerSpecificData(userID, dealerID) {
             "userID": userID.toString()
         };
         return axios.all([
-            // axios.post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', dealerData),
-            // axios.post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', userData)
-            axios.post('http://localhost:8080/JAX-RS/rest/DealerSpecificData/data', dealerData),
-            axios.post('http://localhost:8080/JAX-RS/rest/UserAverages/data', userData)
+            axios.post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', dealerData),
+            axios.post('https://4j9r3i1x9c.execute-api.us-east-1.amazonaws.com/dev/vindatabucket', userData)
+            // axios.post('http://localhost:8080/JAX-RS/rest/DealerSpecificData/data', dealerData),
+            // axios.post('http://localhost:8080/JAX-RS/rest/UserAverages/data', userData)
         ]).then(
             axios.spread(function (dealerResponse, userResponse) {
                 //... This callback will be executed only when both requests are complete.

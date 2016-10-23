@@ -6,7 +6,6 @@ import CustomerPage from './components/CustomerPage';
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={DealerPage}/>
-    <Route path="customer" component={CustomerPage} />
+    <Route component={DealerPage}/>
   </Route>
 );

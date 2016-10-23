@@ -18,7 +18,6 @@ class UserPanelApp extends Component {
     }
 
     render() {
-        //let panelStyle = {padding:'10px 5px', marginTop:"-1px"};
         let titleStyle = {fontWeight:'bold', fontFamily:'Roboto', fontSize:'18px'};
         let upstyle = {paddingLeft: 15};
         return (
@@ -35,13 +34,6 @@ class UserPanelApp extends Component {
                                     <SearchBar Data={this.props.appState} Actions={this.props.actions}/>
                                 </div>
                              </div>
-                           {/* <div className="col-md-2 text-right" id="righticons">
-                            <nav>
-                                <Link to="/">Dealer</Link>
-                                {" | "}
-                                <Link to="Customer">Customer</Link>
-                            </nav>
-                            </div>*/}
                         </div>
                     </div>
                 </div>
