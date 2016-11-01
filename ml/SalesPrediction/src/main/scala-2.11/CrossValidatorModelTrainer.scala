@@ -41,8 +41,11 @@ object CrossValidatorModelTrainer {
     //implicit conversion for types
     import spark.sqlContext.implicits._
 
-    val numericFeatures = Seq("leadcreationmonth", "leadcreationday", "actionableminute", "attemptedcontactminute", "adjustedattemptedcontactminute", "actualcontactminute", "firstappointmentday", "firstappointmentconfirmationday", "appointments", "leadage", "hasSalesRepEmail", "hasSalesRepCall", "hasCustomerReplyEmail", "hasAutoResponderEmail", "firstsalesrepemailday", "firstsalesrepcallday", "visits", "firstvisitday", "lastvisitday", "pricechanges", "firstpricechangeday", "lastpricechangeday")
-    val categoricalFeatures = Seq("hasSalesRepEmail", "hasSalesRepCall", "hasCustomerReplyEmail", "hasAutoResponderEmail")
+    val numericFeatures = Seq(/*"leadcreationmonth","leadcreationday",*/"actionableminute","attemptedcontactminute","adjustedattemptedcontactminute","actualcontactminute","firstappointmentday","firstappointmentconfirmationday","appointments","leadage","firstsalesrepemailday","firstsalesrepcallday","visits","firstvisitday","lastvisitday","pricechanges","firstpricechangeday","lastpricechangeday")
+    val categoricalFeatures = Seq("hasSalesRepEmail","hasSalesRepCall","hasCustomerReplyEmail","hasAutoResponderEmail")
+    val indexedCategoricalFeatures = categoricalFeatures.map(_ + "Indexed")
+    val features = numericFeatures ++ categoricalFeatures
+    val IndexedFeatures = numericFeatures ++ indexedCategoricalFeatures
 
     val featureHeader = "features"
     val labelHeader = "Sold"
@@ -102,7 +105,7 @@ object CrossValidatorModelTrainer {
     val elapsedTime = (System.nanoTime() - startTime) / 1e9
     println(s"Training time: $elapsedTime seconds")
 
-    predictDF.show(3)
+    dataDF.show(3)
     val predictions = trainedModel.transform(predictDF)
 
 
@@ -121,7 +124,7 @@ object CrossValidatorModelTrainer {
 
     predictions
       .select("AutoLeadID", "label", "prediction", "probability")
-      .map(row => (row.getInt(0), row.getDouble(1), row.getDouble(2), sigmoid(row.getAs[org.apache.spark.ml.linalg.DenseVector](3).values(1))))
+      .map(row => (row.getLong(0), row.getDouble(1), row.getDouble(2), sigmoid(row.getAs[org.apache.spark.ml.linalg.DenseVector](3).values(1))))
       .withColumnRenamed("_1", "AutoLeadID")
       .withColumnRenamed("_2", "Label")
       .withColumnRenamed("_3", "Prediction")

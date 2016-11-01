@@ -51,7 +51,7 @@ object DataPrep {
 
     //add a label and populate with zeros
     val newTestDF = testDF
-       .withColumn("Sold", lit("0").cast(StringType))
+       .withColumn("Sold", lit("Active").cast(StringType))
 
 
     (trainDF, newTestDF)
@@ -74,7 +74,7 @@ object DataPrep {
     val testDF = sqlContext.read
       .format("com.databricks.spark.csv")
       .option("header", "true")
-      .schema(testSchema)
+      .schema(trainSchema) //************//
       .load(HDFS + "/test/")
 
 
@@ -98,7 +98,7 @@ object DataPrep {
       .format("com.databricks.spark.csv")
       .option("header", "true")
       .schema(testSchema)
-      .load(HDFS + "/test/")
+      .load(HDFS + "/test/2015ActiveSold_DataSet_20161001_Test1.csv")
 
 
     //trainDF.na.drop()

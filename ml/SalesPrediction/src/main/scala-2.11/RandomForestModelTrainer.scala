@@ -38,22 +38,28 @@ object RandomForestModelTrainer {
 
     val sc = spark.sparkContext
 
-    val (dataDF, predictDF) = DataPrep.getTrainingDF(spark.sqlContext, true)
+    val programStartTime = System.nanoTime()
+    val (dataDF, predictDF) = DataPrep.getTrainingDF(sqlContext = spark.sqlContext, withLabel = false)
 
 
-    //val numericFeatures = Seq("leadcreationmonth","leadcreationday","actionableminute","attemptedcontactminute","adjustedattemptedcontactminute","actualcontactminute","firstappointmentday","firstappointmentconfirmationday","appointments","leadage","firstsalesrepemailday","firstsalesrepcallday","visits","firstvisitday","lastvisitday","pricechanges","firstpricechangeday","lastpricechangeday")
-    val numericFeatures = Seq("leadcreationmonth","leadcreationday","actionableminute","attemptedcontactminute","adjustedattemptedcontactminute","actualcontactminute","firstappointmentday","firstappointmentconfirmationday","appointments","leadage","hasSalesRepEmail","hasSalesRepCall","hasCustomerReplyEmail","hasAutoResponderEmail","firstsalesrepemailday","firstsalesrepcallday","visits","firstvisitday","lastvisitday","pricechanges","firstpricechangeday","lastpricechangeday")
+    //implicit conversion for types
+    import spark.sqlContext.implicits._
+
+    val numericFeatures = Seq(/*"leadcreationmonth","leadcreationday",*/"actionableminute","attemptedcontactminute","adjustedattemptedcontactminute"/*,"leadage"*/,"actualcontactminute","firstappointmentday","firstappointmentconfirmationday","appointments","firstsalesrepemailday","firstsalesrepcallday","visits","firstvisitday","lastvisitday","pricechanges","firstpricechangeday","lastpricechangeday")
+
     val categoricalFeatures = Seq("hasSalesRepEmail","hasSalesRepCall","hasCustomerReplyEmail","hasAutoResponderEmail")
     val indexedCategoricalFeatures = categoricalFeatures.map(_ + "Indexed")
-    val allFeatures = numericFeatures //++ categoricalFeatures
-    val allIndexedfeatures = numericFeatures //++ indexedCategoricalFeatures
+    val features = numericFeatures ++ categoricalFeatures
+    val IndexedFeatures = numericFeatures ++ indexedCategoricalFeatures
 
 
     val IDHeader = "AutoLeadID"
-    val labelHeader = "SoldString"
     val featureHeader = "Features"
+    val labelHeader = "Sold"
+    val indexedLabelHeader = "SoldLabel"
 
-    val allPredictFeatures = allFeatures ++ Seq(IDHeader)
+
+    val allPredictFeatures = features ++ Seq(IDHeader)
 
     val dataDFFiltered = dataDF.select(labelHeader, allPredictFeatures: _*)
 
@@ -72,20 +78,18 @@ object RandomForestModelTrainer {
       new StringIndexer()
         .setInputCol(colName)
         .setOutputCol(colName + "Indexed")
-        .fit(allData)
-    }
 
-    val indexedLabelHeader = "SoldIndexed"
+    }
 
     // index classes
     val labelIndexer = new StringIndexer()
       .setInputCol(labelHeader)
       .setOutputCol(indexedLabelHeader)
-      .fit(allData)
+      .fit(allData) //alldata
 
     // vector assembler
     val assembler = new VectorAssembler()
-      .setInputCols(Array(allIndexedfeatures: _*))
+      .setInputCols(Array(IndexedFeatures: _*))
       .setOutputCol(featureHeader)
 
     val randomForest = new RandomForestClassifier()
@@ -97,13 +101,14 @@ object RandomForestModelTrainer {
       .setOutputCol("predictedLabel")
       .setLabels(labelIndexer.labels)
 
-    // define the order of the operations to be performed
-//    val pipeline = new Pipeline().setStages(Array.concat(
-//      stringIndexers.toArray,
-//      Array(labelIndexer, assembler, randomForest, labelConverter)
-//    ))
+    val pipeline = new Pipeline()
+      .setStages(stringIndexers.toArray
+        :+ labelIndexer
+        :+ assembler
+        :+ randomForest
+        :+ labelConverter
+      )
 
-    val pipeline = new Pipeline().setStages(Array(labelIndexer, assembler, randomForest, labelConverter))
 
     // grid of values to perform cross validation using different parameters
     val paramGrid = new ParamGridBuilder()
@@ -119,47 +124,70 @@ object RandomForestModelTrainer {
       .setEstimator(pipeline)
       .setEvaluator(evaluator)
       .setEstimatorParamMaps(paramGrid)
-      .setNumFolds(10)
+      .setNumFolds(4)
 
     val startTime = System.nanoTime()
     // train the model
     val crossValidatorModel = cv.fit(dataDFFiltered)
 
+
     val elapsedTime = (System.nanoTime() - startTime) / 1e9
     println(s"Training time: $elapsedTime seconds")
 
-    val predictions = crossValidatorModel.transform(predictDFFiltered)
-//
-//    val predictionAndLabels =predictions.select("prediction", "predictedLabel").rdd.map(x =>
-//      (x(0).asInstanceOf[Double], x(1).asInstanceOf[Double]))
-//    val metrics = new BinaryClassificationMetrics(predictionAndLabels)
-    // A Precision-Recall curve plots (precision, recall) points for different threshold values
-    // while a receiver operating characteristic, or ROC, curve plots (recall, false positive rate) points.
+    dataDFFiltered.show(3)
+
+    val model = crossValidatorModel.bestModel
+    val predictions = model.transform(predictDFFiltered)
+
+
     println("******Metrics*******")
-    val evaluator1 = new BinaryClassificationEvaluator().setLabelCol(indexedLabelHeader)
-    // Evaluates predictions and returns a scalar metric areaUnderROC(larger is better).
-    var accuracy = evaluator1.evaluate(predictions)
+    val evaluator1 = new BinaryClassificationEvaluator()
+      .setLabelCol(indexedLabelHeader)
+    val accuracy = evaluator1.evaluate(predictions)
     println("Accuracy: " + accuracy)
 
-    accuracy = evaluator.evaluate(predictions)
-    println("Accuracy: " + accuracy)
+    val predsAndlabel = predictions.select("prediction", "SoldLabel").rdd.map( x => (x.getDouble(0), x.getDouble(1)) )
+    val metrics = new BinaryClassificationMetrics(predsAndlabel)
+    println("Area under ROC: " + metrics.areaUnderROC())
+    println("Area under PR: " + metrics.areaUnderPR())
 
+    metrics.pr().foreach {
+      case (p, r) =>
+        println(s"Precision: $p, Recall: $r")
+    }
 
-    //println("area under the receiver operating characteristic (ROC) curve : " + metrics.areaUnderROC.toString)
+    metrics.precisionByThreshold().foreach {
+      case (t, p) =>
+        println(s"Threshold: $t, Precision: $p")
+    }
+
+    metrics.recallByThreshold().foreach {
+      case (t, r) =>
+        println(s"Threshold: $t, Recall: $r")
+    }
 
     //predictions.show(25)
 
-   // crossValidatorModel.write.overwrite().save(HDFS + "/Models/SP/RF/")
+    crossValidatorModel.write.overwrite().save(HDFS + "/Models/SP/RF/")
+
+    val ProgramElapsedTime = (System.nanoTime() - programStartTime) / 1e9
+    println(s"program run time: $ProgramElapsedTime seconds")
+
+    predictions
+      .select("AutoLeadID", "SoldLabel", "PredictedLabel", "prediction", "probability")
+      .map(row => (row.getLong(0), row.getDouble(1), row.getString(2), row.getDouble(3), row.getAs[org.apache.spark.ml.linalg.DenseVector](4).values(1)))
+      .withColumnRenamed("_1", "AutoLeadID")
+      .withColumnRenamed("_2", "SoldLabel")
+      .withColumnRenamed("_3", "PredictedLabel")
+      .withColumnRenamed("_4", "Prediction")
+      .withColumnRenamed("_5", "Confidence")
+      .coalesce(1)
+      .write.mode(SaveMode.Overwrite)
+      .format("json")
+      .option("header", "true")
+      .save(HDFS + "/output")
 
 
-//    predictions
-//      .withColumn("Sold", col("predictedLabel"))
-//      .select("AutoLeadID", "Sold")
-//      .coalesce(1)
-//      .write.mode(SaveMode.Overwrite)
-//      .format("com.databricks.spark.csv")
-//      .option("header", "true")
-//      .save(HDFS + "/output")
 
   }
 

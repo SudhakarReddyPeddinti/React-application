@@ -1,15 +1,13 @@
-import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 import org.apache.spark.ml.tuning.CrossValidatorModel
-import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode, SparkSession}
+import org.apache.spark.sql.{SaveMode, SparkSession}
 import vin.analytics.ml.sales.data.DataPrep
-
 
 
 /**
   * Created by mali on 9/18/2016.
   */
 
-object SalesPrediction {
+object SalesScenarioPrediction {
 
   def main(args: Array[String]) {
 

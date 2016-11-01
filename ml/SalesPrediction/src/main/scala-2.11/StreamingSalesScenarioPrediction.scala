@@ -1,19 +1,17 @@
 import com.amazonaws.regions.Regions
+import com.amazonaws.services.sqs.AmazonSQSClient
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.tuning.CrossValidatorModel
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{SaveMode, SparkSession}
+import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.streaming.{Seconds, StreamingContext, Time}
-import awscala.sqs
-import com.amazonaws.services.sqs.AmazonSQSClient
-import org.apache.spark.sql.Row
 import vin.analytics.ml.sales.data.DataPrep
 
 
 /**
   * Created by mali on 9/28/2016.
   */
-object StreamingSalesPrediction {
+object StreamingSalesScenarioPrediction {
 
 
   def main(args: Array[String]): Unit = {
