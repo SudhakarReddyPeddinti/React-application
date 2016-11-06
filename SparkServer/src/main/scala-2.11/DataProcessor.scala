@@ -12,29 +12,30 @@ object DataProcessor {
     val spark = SparkSession.builder.master("local").appName("Simple Application").getOrCreate()
 
     // Read data from ./csv file
-   // val df = spark.read.option("header","False").option("inferSchema","true").csv("s3://sce.umkc.ml/metrics/DealerUserResponseTime.csv")
-    val df = spark.read.option("header","False").option("inferSchema","true").csv("/Users/sudhakar/Downloads/workingDUResp.csv")
+    val df = spark.read.option("header","False").option("inferSchema","true").csv("s3://sce.umkc.ml/metrics/DealerUserResponseTime.csv")
     df.createOrReplaceTempView("DealerUserRespTime")
 
-    // All Dealer data
+    // Dealer Averages
     val DealerAvgTime = spark.sql("SELECT _c0 as Dealer, AVG(_c2) as Average FROM DealerUserRespTime GROUP BY _c0")
     spark.sparkContext.hadoopConfiguration.set("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false")
-    DealerAvgTime.coalesce(1).write.mode("Overwrite").format("com.databricks.spark.csv").csv("/Users/sudhakar/Downloads/Output/DealerAverages")
+    DealerAvgTime.coalesce(1).write.mode("Overwrite").json("s3://sce.umkc.ml/metrics/output/DealerAverages")
     DealerAvgTime.createOrReplaceTempView("AverageDealerResponseTime")
-    DealerAvgTime.toString()
 
 
+    // Histogram calculations
+    val histogram = spark.sql("SELECT floor(Average/45.00)*45 + 45 as bucket_size, COUNT(*) AS count FROM " +
+      " AverageDealerResponseTime GROUP BY 1 ORDER BY 1")
+    histogram.coalesce(1).write.mode("Overwrite").format("com.databricks.spark.csv").save("s3://sce.umkc.ml/metrics/output/Histogram")
 
-    val std = spark.sql("SELECT STD(Average) StandardDeviation, AVG(Average) Mean, MIN(Dealer) as MinValue, MAX(Dealer) as MaxValue FROM AverageDealerResponseTime")
-    std.coalesce(1).write.mode("Overwrite").format("com.databricks.spark.csv").csv("/Users/sudhakar/Downloads/Output/AllDealerDataStd")
 
     // User Averages
     val UserAvgTime = spark.sql("SELECT First(_c1) as User, AVG(_c2) as Average, First(_c0) as Dealer FROM DealerUserRespTime GROUP BY _c1")
-    UserAvgTime.coalesce(1).write.mode("Overwrite").format("com.databricks.spark.csv").csv("/Users/sudhakar/Downloads/Output/UserAverages")
+    UserAvgTime.coalesce(1).write.mode("Overwrite").json("s3://sce.umkc.ml/metrics/output/UserAverages")
     UserAvgTime.createOrReplaceTempView("DealerUserUserAvg")
 
-    val DealerSTD = spark.sql("SELECT STD(Average) StandardDeviation, AVG(Average) Mean, Min(User) Minimum, Max(User) Maximum, Dealer FROM DealerUserUserAvg GROUP BY Dealer")
-    DealerSTD.coalesce(1).write.mode("Overwrite").format("com.databricks.spark.csv").csv("/Users/sudhakar/Downloads/Output/DealerSpecificData")
 
+    // Dealer specific statistics
+    val DealerSTD = spark.sql("SELECT STD(Average) StandardDeviation, AVG(Average) Mean, Min(Average) Minimum, Max(Average) Maximum, Dealer FROM DealerUserUserAvg GROUP BY Dealer")
+    DealerSTD.coalesce(1).write.mode("Overwrite").json("s3://sce.umkc.ml/metrics/output/DealerSpecificData")
   }
 }
