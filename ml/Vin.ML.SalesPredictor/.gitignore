@@ -1,8 +1,0 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/ml/Vin.ML.SalesPredictor/packages
-/Vin.Agent.ML.SalePredictor/bin/Debug
-/Vin.Test.ML.SalesPredictor/bin/Debug
-/Vin.Test.ML.SalesPredictor/obj/Debug
